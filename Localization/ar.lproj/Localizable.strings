@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  Localization
+
+  Created by Taimoor Saeed on 20/06/2019.
+  Copyright © 2019 Admin. All rights reserved.
+*/
+
+
+"header_text" = "اللغة الحالية";
+"change_language" = "تغيير اللغة";

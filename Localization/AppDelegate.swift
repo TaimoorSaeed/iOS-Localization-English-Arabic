@@ -16,6 +16,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        if let selectedLanguage = RKLocalization.sharedInstance.getLanguage(){
+            RKLocalization.sharedInstance.setLanguage(language: selectedLanguage)
+        }else{
+            let languageCode = Locale.preferredLanguages[0]
+            if Languages.isLanguageAvailable(languageCode){
+                RKLocalization.sharedInstance.setLanguage(language: languageCode)
+            }else{
+                RKLocalization.sharedInstance.setLanguage(language: "en")
+            }
+        }
+        self.initRootView()
+        
         return true
     }
 
@@ -39,6 +51,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    func initRootView(){
+        
+        // set appearance of component on basis of language direction
+        let dir = RKLocalization().getlanguageDirection()
+        if  dir == .leftToRight {
+            let semantic: UISemanticContentAttribute = .forceLeftToRight
+            UITabBar.appearance().semanticContentAttribute = semantic
+            UIView.appearance().semanticContentAttribute = semantic
+            UINavigationBar.appearance().semanticContentAttribute = semantic
+        }
+        else {
+            let semantic: UISemanticContentAttribute = .forceRightToLeft
+            UITabBar.appearance().semanticContentAttribute = semantic
+            UIView.appearance().semanticContentAttribute = semantic
+            UINavigationBar.appearance().semanticContentAttribute = semantic
+        }
+        
+        // init root controller of application and setting it to window
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        let rootController: UINavigationController? = storyboard.instantiateViewController(withIdentifier: "vc") as? UINavigationController
+        
+        window?.rootViewController = rootController
     }
 
 
